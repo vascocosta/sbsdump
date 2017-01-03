@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
     }
     message = (MESSAGE *)malloc(sizeof(MESSAGE));
     while (1) {
-        if (!read_message(socket_fd, buffer)) {
+        if (!read_message(socket_fd, buffer, sizeof(buffer))) {
             perror("Problem reading from the server");
             return 1;
         }

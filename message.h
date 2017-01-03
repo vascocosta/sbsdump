@@ -44,7 +44,7 @@ typedef struct {
     int   ground;
 } MESSAGE;
 
-int read_message(int socket_fd, char *buffer);
+int read_message(int socket_fd, char *buffer, size_t n);
 void parse_message (MESSAGE *message, char *buffer);
 
 #endif
