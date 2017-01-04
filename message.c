@@ -31,7 +31,7 @@ int read_message(int socket_fd, char *buffer, size_t n)
     while (*ch != '\n' && n--) {
         if (!read(socket_fd, ch, 1))
             return 0;
-        strcat(buffer, ch);
+        strncat(buffer, ch, 1);
     }
     return 1;
 }
