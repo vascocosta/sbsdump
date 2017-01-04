@@ -10,13 +10,13 @@ do
     airline=$(curl -s https://ae.roplan.es/api/hex-airline.php?hex=$hex_id)
     route=$(curl -s https://ae.roplan.es/api/callsign-route.php?callsign=$callsign)
     image=$(curl -s https://ae.roplan.es/api/hex-image.php?hex=$hex_id)
-    echo "Time:\t\t$time"
-    echo "Registration:\t$registration"
-    echo "Model:\t\t$model"
-    echo "Airline:\t$airline"
-    echo "Flight:\t\t$callsign"
-    echo "Route:\t\t$route"
-    echo "Image:\t\t$image"
-    echo "FR24:\t\thttps://www.flightradar24.com/$callsign"
+    echo -e "Time:\t\t$time"
+    echo -e "Registration:\t$registration"
+    echo -e "Model:\t\t$model"
+    echo -e "Airline:\t$airline"
+    echo -e "Flight:\t\t$callsign"
+    echo -e "Route:\t\t$route"
+    echo -e "Image:\t\t$image"
+    echo -e "FR24:\t\thttps://www.flightradar24.com/$callsign"
     echo
 done
