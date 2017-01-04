@@ -48,27 +48,26 @@ int cmpfunc (const void *a, const void *b)
    return (*(unsigned long int*)a - *(unsigned long int*)b);
 }
 
-int connect_server(const char *hostname, int port)
+int connect_server(const char *hostname, const char *service)
 {
-    struct sockaddr_in serv_addr;
-    struct hostent *server;
+    struct addrinfo hints;
+    struct addrinfo *res;
     int socket_fd;
 
-    socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    if (getaddrinfo(hostname, service, &hints, &res) != 0) {
+        return 0;
+    }
+    socket_fd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (socket_fd < 0) {
         return 0;
     }
-    server = gethostbyname(hostname);
-    if (server == NULL) {
+    if (connect(socket_fd, res->ai_addr, res->ai_addrlen) < 0) {
         return 0;
     }
-    memset((char *)&serv_addr, 0, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    memcpy((char *)&serv_addr.sin_addr.s_addr, (char *)server->h_addr, server->h_length);
-    serv_addr.sin_port = htons(port);
-    if (connect(socket_fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        return 0;
-    }
+    freeaddrinfo(res);
     return socket_fd;
 }
 
@@ -83,8 +82,8 @@ int main(int argc, char *argv[])
     int option;
     int option_r = 0;
     int option_u = 0;
-    int port = 30003;
     int *result;
+    char *service = NULL;
     int socket_fd;
 
     while ((option = getopt(argc, argv, "hp:ru")) != -1) {
@@ -94,7 +93,7 @@ int main(int argc, char *argv[])
                 return 0;
                 break;
             case 'p':
-                port = atoi(optarg);
+                service = optarg;
                 break;
             case 'r':
                 option_r = 1;
@@ -111,7 +110,10 @@ int main(int argc, char *argv[])
         show_usage();
         return 0;
     }
-    if (!(socket_fd = connect_server(hostname, port))) {
+    if (service == NULL) {
+        service = "30003";
+    }
+    if (!(socket_fd = connect_server(hostname, service))) {
         perror("Problem connecting to server");
         return 1;
     }
