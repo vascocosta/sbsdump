@@ -29,6 +29,8 @@
 
 #include "message.h"
 
+#define MAX_HEX_IDS 1000 
+
 #define USAGE                                \
     "Usage: sbsdump [OPTION]... hostname\n"  \
     "Dump data in SBS format from a socket." \
@@ -75,7 +77,7 @@ int main(int argc, char *argv[])
 {
     char buffer[256];
     unsigned long int hex_id_dec;
-    unsigned long int hex_ids[1000] = {0};
+    unsigned long int hex_ids[MAX_HEX_IDS] = {0};
     int hex_ids_i = 0;
     char *hostname = NULL;
     MESSAGE *message;
@@ -129,9 +131,13 @@ int main(int argc, char *argv[])
             memset(message, 0, sizeof(MESSAGE));
             parse_message(message, buffer);
             if (option_u) {
+                if (hex_ids_i == MAX_HEX_IDS)
+                    hex_ids_i = 0;
+                if (hex_ids_i == 0)
+                    memset(hex_ids, 0, sizeof(hex_ids));
                 hex_id_dec = strtoul(message->hex_id, NULL, 16);
-                qsort(hex_ids, 1000, sizeof(unsigned long int), cmpfunc);
-                result = bsearch(&hex_id_dec, hex_ids, 1000, sizeof(unsigned long int), cmpfunc);
+                qsort(hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), cmpfunc);
+                result = bsearch(&hex_id_dec, hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), cmpfunc);
                 if (result == NULL && strcmp(message->callsign, "empty") != 0) {
                     hex_ids[hex_ids_i++] = hex_id_dec;
                     printf("Hex ID: %s "
