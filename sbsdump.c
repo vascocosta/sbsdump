@@ -131,10 +131,12 @@ int main(int argc, char *argv[])
             memset(message, 0, sizeof(MESSAGE));
             parse_message(message, buffer);
             if (option_u) {
-                if (hex_ids_i == MAX_HEX_IDS)
+                if (hex_ids_i == MAX_HEX_IDS) {
                     hex_ids_i = 0;
-                if (hex_ids_i == 0)
+                }
+                if (hex_ids_i == 0) {
                     memset(hex_ids, 0, sizeof(hex_ids));
+                }
                 hex_id_dec = strtoul(message->hex_id, NULL, 16);
                 qsort(hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), cmpfunc);
                 result = bsearch(&hex_id_dec, hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), cmpfunc);
