@@ -29,7 +29,7 @@
 
 #include "message.h"
 
-#define MAX_HEX_IDS 1000 
+#define MAX_HEX_IDS 1000
 
 #define USAGE                                \
     "Usage: sbsdump [OPTION]... hostname\n"  \
@@ -38,7 +38,7 @@
     "  -h display this help and exit\n"      \
     "  -p set port (default 30003)\n"        \
     "  -r show messages in raw format\n"     \
-    "  -u show only unique hex ids\n" 
+    "  -u show only unique hex ids\n"
 
 void show_usage()
 {
