@@ -133,15 +133,14 @@ int main(int argc, char *argv[])
             if (option_u) {
                 if (hex_ids_i == MAX_HEX_IDS) {
                     hex_ids_i = 0;
-                }
-                if (hex_ids_i == 0) {
                     memset(hex_ids, 0, sizeof(hex_ids));
                 }
                 hex_id_dec = strtoul(message->hex_id, NULL, 16);
                 qsort(hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), cmpfunc);
                 result = bsearch(&hex_id_dec, hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), cmpfunc);
                 if (result == NULL && strcmp(message->callsign, "empty") != 0) {
-                    hex_ids[hex_ids_i++] = hex_id_dec;
+                    hex_ids[0] = hex_id_dec;
+                    hex_ids_i++;
                     printf("Hex ID: %s "
                            "Callsign: %s\n",
                            message->hex_id,
