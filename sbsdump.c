@@ -73,10 +73,29 @@ int connect_server(const char *hostname, const char *service)
     return socket_fd;
 }
 
+int insert_hex_id(MESSAGE *message, unsigned long int *hex_ids, int *hex_ids_i)
+{
+    unsigned long int hex_id_dec;
+    int *result;
+
+    if (*hex_ids_i == MAX_HEX_IDS) {
+        *hex_ids_i = 0;
+        memset(hex_ids, 0, 4 * MAX_HEX_IDS);
+    }
+    hex_id_dec = strtoul(message->hex_id, NULL, 16);
+    qsort(hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), cmpfunc);
+    result = bsearch(&hex_id_dec, hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), cmpfunc);
+    if (result == NULL && strcmp(message->callsign, "empty") != 0) {
+        hex_ids[0] = hex_id_dec;
+        (*hex_ids_i)++;
+        return 1;
+    }
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
     char buffer[256];
-    unsigned long int hex_id_dec;
     unsigned long int hex_ids[MAX_HEX_IDS] = {0};
     int hex_ids_i = 0;
     char *hostname = NULL;
@@ -84,7 +103,6 @@ int main(int argc, char *argv[])
     int option;
     int option_r = 0;
     int option_u = 0;
-    int *result;
     char *service = NULL;
     int socket_fd;
 
@@ -131,16 +149,7 @@ int main(int argc, char *argv[])
             memset(message, 0, sizeof(MESSAGE));
             parse_message(message, buffer);
             if (option_u) {
-                if (hex_ids_i == MAX_HEX_IDS) {
-                    hex_ids_i = 0;
-                    memset(hex_ids, 0, sizeof(hex_ids));
-                }
-                hex_id_dec = strtoul(message->hex_id, NULL, 16);
-                qsort(hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), cmpfunc);
-                result = bsearch(&hex_id_dec, hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), cmpfunc);
-                if (result == NULL && strcmp(message->callsign, "empty") != 0) {
-                    hex_ids[0] = hex_id_dec;
-                    hex_ids_i++;
+                if (insert_hex_id(message, hex_ids, &hex_ids_i)) {
                     printf("Hex ID: %s "
                            "Callsign: %s\n",
                            message->hex_id,
