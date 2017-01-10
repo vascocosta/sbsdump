@@ -27,6 +27,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "macros.h"
 #include "message.h"
 
 #define MAX_HEX_IDS 1000
@@ -73,7 +74,7 @@ int connect_server(const char *hostname, const char *service)
     return socket_fd;
 }
 
-int insert_hex_id(MESSAGE *message, unsigned long int *hex_ids, int *hex_ids_i)
+bool insert_hex_id(MESSAGE *message, unsigned long int *hex_ids, int *hex_ids_i)
 {
     unsigned long int hex_id_dec;
     int *result;
@@ -88,9 +89,9 @@ int insert_hex_id(MESSAGE *message, unsigned long int *hex_ids, int *hex_ids_i)
     if (result == NULL && strcmp(message->callsign, "empty") != 0) {
         hex_ids[0] = hex_id_dec;
         (*hex_ids_i)++;
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 int main(int argc, char *argv[])
@@ -138,7 +139,7 @@ int main(int argc, char *argv[])
         return 1;
     }
     message = (MESSAGE *)malloc(sizeof(MESSAGE));
-    while (1) {
+    while (true) {
         if (!read_message(socket_fd, buffer, sizeof(buffer))) {
             perror("Problem reading from the server");
             return 1;
