@@ -45,7 +45,7 @@ void show_usage()
     printf(USAGE);
 }
 
-int cmpfunc (const void *a, const void *b)
+int compare_hex_id(const void *a, const void *b)
 {
    return (*(unsigned long int*)a - *(unsigned long int*)b);
 }
@@ -83,8 +83,8 @@ int insert_hex_id(MESSAGE *message, unsigned long int *hex_ids, int *hex_ids_i)
         memset(hex_ids, 0, 4 * MAX_HEX_IDS);
     }
     hex_id_dec = strtoul(message->hex_id, NULL, 16);
-    qsort(hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), cmpfunc);
-    result = bsearch(&hex_id_dec, hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), cmpfunc);
+    qsort(hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), compare_hex_id);
+    result = bsearch(&hex_id_dec, hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), compare_hex_id);
     if (result == NULL && strcmp(message->callsign, "empty") != 0) {
         hex_ids[0] = hex_id_dec;
         (*hex_ids_i)++;
