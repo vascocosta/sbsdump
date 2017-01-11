@@ -85,7 +85,10 @@ bool insert_hex_id(MESSAGE *message, unsigned long int *hex_ids, int *hex_ids_i)
     }
     hex_id_dec = strtoul(message->hex_id, NULL, 16);
     qsort(hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), compare_hex_id);
-    result = bsearch(&hex_id_dec, hex_ids, MAX_HEX_IDS, sizeof(unsigned long int), compare_hex_id);
+    result = bsearch(&hex_id_dec,
+                     hex_ids, MAX_HEX_IDS,
+                     sizeof(unsigned long int),
+                     compare_hex_id);
     if (result == NULL && strcmp(message->callsign, "empty") != 0) {
         hex_ids[0] = hex_id_dec;
         (*hex_ids_i)++;
