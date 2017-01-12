@@ -1,9 +1,13 @@
 CC=gcc
-CFLAGS=-I.
-DEPS = message.h
+CFLAGS=-g -Wall -I.
+DEPS = macros.h message.h
+OBJ = message.o sbsdump.o
 
 %.o: %.c $(DEPS)
-	$(CC) -c -g -o $@ $< $(CFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS)
 
-sbsdump: sbsdump.o message.o 
-	gcc -g -o sbsdump sbsdump.o message.o -I.
+sbsdump: $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS)
+
+clean:
+	rm -f *.o sbsdump
