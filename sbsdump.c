@@ -74,13 +74,14 @@ int connect_server(const char *hostname, const char *service)
     return socket_fd;
 }
 
-bool insert_hex_id(MESSAGE *message, unsigned long int *hex_ids, int *hex_ids_i)
+bool insert_hex_id(MESSAGE *message, unsigned long int *hex_ids)
 {
     unsigned long int hex_id_dec;
+    static int hex_ids_i = 0;
     int *result;
 
-    if (*hex_ids_i == MAX_HEX_IDS) {
-        *hex_ids_i = 0;
+    if (hex_ids_i == MAX_HEX_IDS) {
+        hex_ids_i = 0;
         memset(hex_ids, 0, 4 * MAX_HEX_IDS);
     }
     hex_id_dec = strtoul(message->hex_id, NULL, 16);
@@ -91,7 +92,7 @@ bool insert_hex_id(MESSAGE *message, unsigned long int *hex_ids, int *hex_ids_i)
                      compare_hex_id);
     if (result == NULL && strcmp(message->callsign, "empty") != 0) {
         hex_ids[0] = hex_id_dec;
-        (*hex_ids_i)++;
+        hex_ids_i++;
         return true;
     }
     return false;
@@ -101,7 +102,6 @@ int main(int argc, char *argv[])
 {
     char buffer[256];
     unsigned long int hex_ids[MAX_HEX_IDS] = {0};
-    int hex_ids_i = 0;
     char *hostname = NULL;
     MESSAGE *message;
     int option;
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
             memset(message, 0, sizeof(MESSAGE));
             parse_message(message, buffer);
             if (option_u) {
-                if (insert_hex_id(message, hex_ids, &hex_ids_i)) {
+                if (insert_hex_id(message, hex_ids)) {
                     printf("Hex ID: %s "
                            "Callsign: %s\n",
                            message->hex_id,
