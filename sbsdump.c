@@ -74,7 +74,7 @@ int connect_server(const char *hostname, const char *service)
     return socket_fd;
 }
 
-bool insert_hex_id(MESSAGE *message, unsigned long int *hex_ids)
+bool new_aircraft(MESSAGE *message, unsigned long int *hex_ids)
 {
     unsigned long int hex_id_dec;
     static int hex_ids_i = 0;
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
             memset(message, 0, sizeof(MESSAGE));
             parse_message(message, buffer);
             if (option_u) {
-                if (insert_hex_id(message, hex_ids)) {
+                if (new_aircraft(message, hex_ids)) {
                     printf("Hex ID: %s "
                            "Callsign: %s\n",
                            message->hex_id,
