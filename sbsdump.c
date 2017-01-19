@@ -33,14 +33,14 @@
 
 #define MAX_HEX_IDS 1000
 
-#define USAGE                                \
-    "Usage: sbsdump [OPTION]... hostname\n"  \
-    "Dump data in SBS format from a socket." \
-    "\n"                                     \
-    "  -h display this help and exit\n"      \
-    "  -p set port (default 30003)\n"        \
-    "  -r show messages in raw format\n"     \
-    "  -u show only unique hex ids\n"
+#define USAGE                                        \
+    "Usage: sbsdump [OPTION]... hostname\n"          \
+    "Dump data in SBS format from a socket."         \
+    "\n"                                             \
+    "  -h display this help and exit\n"              \
+    "  -p set port (default 30003)\n"                \
+    "  -r show messages in raw format\n"             \
+    "  -s show only new aircrafts (spotting mode)\n"
 
 void show_usage()
 {
@@ -108,11 +108,11 @@ int main(int argc, char *argv[])
     MESSAGE *message;
     int option;
     int option_r = 0;
-    int option_u = 0;
+    int option_s = 0;
     char *service = NULL;
     int socket_fd;
 
-    while ((option = getopt(argc, argv, "hp:ru")) != -1) {
+    while ((option = getopt(argc, argv, "hp:rs")) != -1) {
         switch (option) {
             case 'h':
                 show_usage();
@@ -124,8 +124,8 @@ int main(int argc, char *argv[])
             case 'r':
                 option_r = 1;
                 break;
-            case 'u':
-                option_u = 1;
+            case 's':
+                option_s = 1;
                 break;
             default:
                 show_usage();
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
         } else {
             memset(message, 0, sizeof(MESSAGE));
             parse_message(message, buffer);
-            if (option_u) {
+            if (option_s) {
                 if (new_aircraft(message, hex_ids)) {
                     strcpy(aircraft_info[0], lookup_aircraft("reg", message->hex_id));
                     strcpy(aircraft_info[1], lookup_aircraft("type", message->hex_id));
