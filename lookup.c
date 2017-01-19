@@ -41,13 +41,13 @@ static size_t write_response(void *data, size_t size, size_t elements, void *use
 
 char *lookup_aircraft(const char *info, const char *hex_id)
 {
-    CURL *curl_handle;
     CURLcode curl_code;
+    CURL *curl_handle;
     HTTP_RESPONSE http_response; 
     http_response.data = malloc(1);
     http_response.size = 0;
-    char url[512] = "https://ae.roplan.es/api/hex-";
     static char result[512] = "";
+    char url[512] = "https://ae.roplan.es/api/hex-";
 
     strncat(url, info, 256);
     strncat(url, ".php?hex=", 10);
