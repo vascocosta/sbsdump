@@ -1,13 +1,14 @@
 CC=gcc
 CFLAGS=-g -Wall -I.
-DEPS = macros.h message.h
-OBJ = message.o sbsdump.o
+LDFLAGS=-lcurl
+DEPS = lookup.h macros.h message.h
+OBJ = lookup.o message.o sbsdump.o
 
 %.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LDFLAGS)
 
 sbsdump: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
 clean:
 	rm -f *.o sbsdump

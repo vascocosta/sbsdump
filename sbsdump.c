@@ -27,6 +27,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "lookup.h"
 #include "macros.h"
 #include "message.h"
 
@@ -90,7 +91,7 @@ bool new_aircraft(MESSAGE *message, unsigned long int *hex_ids)
                      hex_ids, MAX_HEX_IDS,
                      sizeof(unsigned long int),
                      compare_hex_id);
-    if (result == NULL && strcmp(message->callsign, "empty") != 0) {
+    if (result == NULL /*&& strcmp(message->callsign, "empty") != 0*/) {
         hex_ids[0] = hex_id_dec;
         hex_ids_i++;
         return true;
@@ -100,6 +101,7 @@ bool new_aircraft(MESSAGE *message, unsigned long int *hex_ids)
 
 int main(int argc, char *argv[])
 {
+    char aircraft_info[4][256];
     char buffer[256];
     unsigned long int hex_ids[MAX_HEX_IDS] = {0};
     char *hostname = NULL;
@@ -154,10 +156,24 @@ int main(int argc, char *argv[])
             parse_message(message, buffer);
             if (option_u) {
                 if (new_aircraft(message, hex_ids)) {
-                    printf("Hex ID: %s "
-                           "Callsign: %s\n",
-                           message->hex_id,
-                           message->callsign);
+                    strcpy(aircraft_info[0], lookup_aircraft("reg", message->hex_id));
+                    strcpy(aircraft_info[1], lookup_aircraft("type", message->hex_id));
+                    strcpy(aircraft_info[2], lookup_aircraft("airline", message->hex_id));
+                    strcpy(aircraft_info[3], lookup_aircraft("image", message->hex_id));
+                    printf("Time:\t\t%s\n"
+                            "Hex:\t\t%s\n"
+                            "Registration:\t%s\n"
+                            "Model:\t\t%s\n"
+                            "Airline:\t%s\n"
+                            "Image:\t\t%s\n"
+                            "FR24:\t\thttps://www.flightradar24.com/data/aircraft/%s\n\n",
+                            message->time,
+                            message->hex_id,
+                            aircraft_info[0],
+                            aircraft_info[1],
+                            aircraft_info[2],
+                            aircraft_info[3],
+                            aircraft_info[0]);
                 }
             } else {
                 printf("Callsign: %s\n"
