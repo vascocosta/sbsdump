@@ -160,13 +160,15 @@ int main(int argc, char *argv[])
                     strcpy(aircraft_info[1], lookup_aircraft("type", message->hex_id));
                     strcpy(aircraft_info[2], lookup_aircraft("airline", message->hex_id));
                     strcpy(aircraft_info[3], lookup_aircraft("image", message->hex_id));
-                    printf("Time:\t\t%s\n"
+                    printf("Date:\t\t%s\n"
+                            "Time:\t\t%s\n"
                             "Hex:\t\t%s\n"
                             "Registration:\t%s\n"
                             "Model:\t\t%s\n"
                             "Airline:\t%s\n"
                             "Image:\t\t%s\n"
                             "FR24:\t\thttps://www.flightradar24.com/data/aircraft/%s\n\n",
+                            message->date,
                             message->time,
                             message->hex_id,
                             aircraft_info[0],
