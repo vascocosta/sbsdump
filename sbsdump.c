@@ -33,14 +33,15 @@
 
 #define MAX_HEX_IDS 1000
 
-#define USAGE                                        \
-    "Usage: sbsdump [OPTION]... hostname\n"          \
-    "Dump data in SBS format from a socket."         \
-    "\n"                                             \
-    "  -h display this help and exit\n"              \
-    "  -p set port (default 30003)\n"                \
-    "  -r show messages in raw format\n"             \
-    "  -s show only new aircrafts (spotting mode)\n"
+#define USAGE                                                       \
+    "Usage: sbsdump [OPTION]... hostname\n"                         \
+    "Dump data in SBS format from a socket."                        \
+    "\n"                                                            \
+    "  -c show only aircrafts with a callsign in spotting mode\n"   \
+    "  -h display this help and exit\n"                             \
+    "  -p set port (default 30003)\n"                               \
+    "  -r show messages in raw format\n"                            \
+    "  -s show only new aircrafts excluding dups (spotting mode)\n"
 
 void show_usage()
 {
@@ -75,7 +76,7 @@ int connect_server(const char *hostname, const char *service)
     return socket_fd;
 }
 
-bool new_aircraft(MESSAGE *message, unsigned long int *hex_ids)
+bool new_aircraft(MESSAGE *message, bool callsign, unsigned long int *hex_ids)
 {
     unsigned long int hex_id_dec;
     static int hex_ids_i = 0;
@@ -91,7 +92,10 @@ bool new_aircraft(MESSAGE *message, unsigned long int *hex_ids)
                      hex_ids, MAX_HEX_IDS,
                      sizeof(unsigned long int),
                      compare_hex_id);
-    if (result == NULL /*&& strcmp(message->callsign, "empty") != 0*/) {
+    if (result == NULL) {
+        if (callsign && strcmp(message->callsign, "empty") == 0) {
+            return false;
+        }
         hex_ids[0] = hex_id_dec;
         hex_ids_i++;
         return true;
@@ -107,13 +111,17 @@ int main(int argc, char *argv[])
     char *hostname = NULL;
     MESSAGE *message;
     int option;
+    int option_c = 0;
     int option_r = 0;
     int option_s = 0;
     char *service = NULL;
     int socket_fd;
 
-    while ((option = getopt(argc, argv, "hp:rs")) != -1) {
+    while ((option = getopt(argc, argv, "chp:rs")) != -1) {
         switch (option) {
+            case 'c':
+                option_c = 1;
+                break;
             case 'h':
                 show_usage();
                 return 0;
@@ -155,7 +163,7 @@ int main(int argc, char *argv[])
             memset(message, 0, sizeof(MESSAGE));
             parse_message(message, buffer);
             if (option_s) {
-                if (new_aircraft(message, hex_ids)) {
+                if (new_aircraft(message, option_c, hex_ids)) {
                     strcpy(aircraft_info[0], lookup_aircraft("reg", message->hex_id));
                     strcpy(aircraft_info[1], lookup_aircraft("type", message->hex_id));
                     strcpy(aircraft_info[2], lookup_aircraft("airline", message->hex_id));
@@ -165,6 +173,7 @@ int main(int argc, char *argv[])
                             "Hex:\t\t%s\n"
                             "Registration:\t%s\n"
                             "Model:\t\t%s\n"
+                            "Callsign:\t%s\n"
                             "Airline:\t%s\n"
                             "Image:\t\t%s\n"
                             "FR24:\t\thttps://www.flightradar24.com/data/aircraft/%s\n\n",
@@ -173,6 +182,7 @@ int main(int argc, char *argv[])
                             message->hex_id,
                             aircraft_info[0],
                             aircraft_info[1],
+                            message->callsign,
                             aircraft_info[2],
                             aircraft_info[3],
                             aircraft_info[0]);
