@@ -63,14 +63,14 @@ int connect_server(const char *hostname, const char *service)
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     if (getaddrinfo(hostname, service, &hints, &res) != 0) {
-        return 0;
+        return false;
     }
     socket_fd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (socket_fd < 0) {
-        return 0;
+        return false;
     }
     if (connect(socket_fd, res->ai_addr, res->ai_addrlen) < 0) {
-        return 0;
+        return false;
     }
     freeaddrinfo(res);
     return socket_fd;
@@ -111,16 +111,16 @@ int main(int argc, char *argv[])
     char *hostname = NULL;
     MESSAGE *message;
     int option;
-    int option_c = 0;
-    int option_r = 0;
-    int option_s = 0;
+    int option_c = false;
+    int option_r = false;
+    int option_s = false;
     char *service = NULL;
     int socket_fd;
 
     while ((option = getopt(argc, argv, "chp:rs")) != -1) {
         switch (option) {
             case 'c':
-                option_c = 1;
+                option_c = true;
                 break;
             case 'h':
                 show_usage();
@@ -130,10 +130,10 @@ int main(int argc, char *argv[])
                 service = optarg;
                 break;
             case 'r':
-                option_r = 1;
+                option_r = true;
                 break;
             case 's':
-                option_s = 1;
+                option_s = true;
                 break;
             default:
                 show_usage();
