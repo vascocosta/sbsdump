@@ -93,7 +93,7 @@ bool new_aircraft(MESSAGE *message, bool callsign, unsigned long int *hex_ids)
                      sizeof(unsigned long int),
                      compare_hex_id);
     if (result == NULL) {
-        if (callsign && strcmp(message->callsign, "empty") == 0) {
+        if (callsign && strcmp(message->callsign, "n/a") == 0) {
             return false;
         }
         hex_ids[0] = hex_id_dec;
