@@ -9,12 +9,13 @@ The sbsdump tool connects to ADS-B devices on TCP port 30003 by default and dump
 ## Usage
 
 ```
+pi@neptunium:~/src/github.com/vascocosta/sbsdump $ ./sbsdump
 Usage: sbsdump [OPTION]... hostname
 Dump data in SBS format from a socket.
   -h display this help and exit
   -p set port (default 30003)
   -r show messages in raw format
-  -u show only unique hex ids
+  -s show only new aircrafts (spotting mode)
 ```
 
 ## Examples
