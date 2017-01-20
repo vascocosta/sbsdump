@@ -47,29 +47,31 @@ MSG,3,111,11111,4951CD,111111,2017/01/09,20:57:06.002,2017/01/09,20:57:05.993,,6
 ```
 
 ```
-pi@neptunium:~/src/github.com/vascocosta/sbsdump $ ./sbsdump -u localhost
-Hex ID: 4951CB Callsign: TAP1042
-Hex ID: 491147 Callsign: TAP1098
-Hex ID: 45D963 Callsign: VKG605
-```
+pi@neptunium:~/src/github.com/vascocosta/sbsdump $ ./sbsdump -s localhost
+Date:           2017/01/20
+Time:           16:34:50.164
+Hex:            020066
+Registration:   CN-ROE
+Model:          Boeing 737-8B6
+Airline:        Royal Air Maroc
+Image:          http://www.airport-data.com/images/aircraft/small/001/111/001111826.jpg
+FR24:           https://www.flightradar24.com/data/aircraft/CN-ROE
 
-```
-pi@neptunium:~/src/github.com/vascocosta/sbsdump $ ./sbsdump -u localhost | ./lookup.sh
-Time:           21:08:26
-Registration:   CS-TNW
-Model:          Airbus A-320-214
-Airline:        TAP
-Flight:         TAP1230
-Route:          LPPT-UUDD
-Image:          http://www.airport-data.com/images/aircraft/small/001/222/001222582.jpg
-FR24:           https://www.flightradar24.com/TAP1230
-
-Time:           21:08:29
-Registration:   EI-EBS
+Date:           2017/01/20
+Time:           16:34:50.484
+Hex:            4CA853
+Registration:   EI-EMK
 Model:          Boeing 737-8AS
 Airline:        Ryanair
-Flight:         RYR2624
-Route:          LPPD-LPPT
-Image:          http://www.airport-data.com/images/aircraft/small/001/215/001215913.jpg
-FR24:           https://www.flightradar24.com/RYR2624
+Image:          http://www.airport-data.com/images/aircraft/small/001/260/001260520.jpg
+FR24:           https://www.flightradar24.com/data/aircraft/EI-EMK
+
+Date:           2017/01/20
+Time:           16:39:19.409
+Hex:            495292
+Registration:   CS-TTR
+Model:          Airbus A319-112
+Airline:        TAP Air Portugal
+Image:          http://www.airport-data.com/images/aircraft/small/001/245/001245538.jpg
+FR24:           https://www.flightradar24.com/data/aircraft/CS-TTR
 ```
