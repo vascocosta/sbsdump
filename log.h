@@ -17,14 +17,12 @@
  * along with sbsdump.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MACROS_H
-#define MACROS_H
+#ifndef LOG_H
+#define LOG_H
 
-typedef int bool;
+#include "macros.h"
+#include "message.h"
 
-#define false 0
-#define true 1
-
-#define DB_NAME "sbsdump.db"
+bool log_aircraft(MESSAGE *message, char aircraft_info[][256]);
 
 #endif

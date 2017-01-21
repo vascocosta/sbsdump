@@ -27,6 +27,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "log.h"
 #include "lookup.h"
 #include "macros.h"
 #include "message.h"
@@ -39,6 +40,7 @@
     "\n"                                                            \
     "  -c show only aircrafts with a callsign in spotting mode\n"   \
     "  -h display this help and exit\n"                             \
+    "  -l log aircrafts into a data base when in spotting mode\n"   \
     "  -p set port (default 30003)\n"                               \
     "  -r show messages in raw format\n"                            \
     "  -s show only new aircrafts excluding dups (spotting mode)\n"
@@ -105,19 +107,20 @@ bool new_aircraft(MESSAGE *message, bool callsign, unsigned long int *hex_ids)
 
 int main(int argc, char *argv[])
 {
-    char aircraft_info[4][256];
+    char aircraft_info[5][256];
     char buffer[256];
     unsigned long int hex_ids[MAX_HEX_IDS] = {0};
     char *hostname = NULL;
     MESSAGE *message;
     int option;
     int option_c = false;
+    int option_l = false;
     int option_r = false;
     int option_s = false;
     char *service = NULL;
     int socket_fd;
 
-    while ((option = getopt(argc, argv, "chp:rs")) != -1) {
+    while ((option = getopt(argc, argv, "chlp:rs")) != -1) {
         switch (option) {
             case 'c':
                 option_c = true;
@@ -125,6 +128,9 @@ int main(int argc, char *argv[])
             case 'h':
                 show_usage();
                 return 0;
+                break;
+            case 'l':
+                option_l = true;
                 break;
             case 'p':
                 service = optarg;
@@ -168,6 +174,8 @@ int main(int argc, char *argv[])
                     strcpy(aircraft_info[1], lookup_aircraft("type", message->hex_id));
                     strcpy(aircraft_info[2], lookup_aircraft("airline", message->hex_id));
                     strcpy(aircraft_info[3], lookup_aircraft("image", message->hex_id));
+                    strcpy(aircraft_info[4], "https://www.flightradar24.com/data/aircraft/");
+                    strcat(aircraft_info[4], aircraft_info[0]);
                     printf("Date:\t\t%s\n"
                             "Time:\t\t%s\n"
                             "Hex:\t\t%s\n"
@@ -176,7 +184,7 @@ int main(int argc, char *argv[])
                             "Callsign:\t%s\n"
                             "Airline:\t%s\n"
                             "Image:\t\t%s\n"
-                            "FR24:\t\thttps://www.flightradar24.com/data/aircraft/%s\n\n",
+                            "FR24:\t\t%s\n\n",
                             message->date,
                             message->time,
                             message->hex_id,
@@ -185,7 +193,12 @@ int main(int argc, char *argv[])
                             message->callsign,
                             aircraft_info[2],
                             aircraft_info[3],
-                            aircraft_info[0]);
+                            aircraft_info[4]);
+                    if (option_l) {
+                        if (!log_aircraft(message, aircraft_info)) {
+                            perror("Problem logging aircraft");
+                        }
+                    }
                 }
             } else {
                 printf("Callsign: %s\n"
