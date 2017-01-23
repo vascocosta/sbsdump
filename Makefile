@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-g -Wall -I.
-LDFLAGS=-lcurl -lsqlite3
+LDFLAGS=-lsqlite3
 DEPS = log.h lookup.h macros.h message.h
 OBJ = log.o lookup.o message.o sbsdump.o
 

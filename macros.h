@@ -25,6 +25,7 @@ typedef int bool;
 #define false 0
 #define true 1
 
-#define DB_NAME "sbsdump.db"
+#define LOOKUP_DB "basestation.sqb"
+#define LOG_DB "sbsdump.db"
 
 #endif

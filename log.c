@@ -29,7 +29,7 @@ bool log_aircraft(MESSAGE *message, char aircraft_info[][256])
     char *sql;
     int sqlite_code;
 
-    sqlite_code = sqlite3_open(DB_NAME, &db);
+    sqlite_code = sqlite3_open(LOG_DB, &db);
     if (sqlite_code) {
         sqlite3_close(db);
         return false;
@@ -44,16 +44,16 @@ bool log_aircraft(MESSAGE *message, char aircraft_info[][256])
                            "'%q', "
                            "'%q', "
                            "'%q', "
-                           "'%q')",
+                           "'https://www.flightradar24.com/data/aircraft/%q')",
                            message->date,
                            message->time,
                            message->hex_id,
-                           aircraft_info[0],
-                           aircraft_info[1],
+                           aircraft_info[6],
+                           aircraft_info[14],
                            message->callsign,
-                           aircraft_info[2],
-                           aircraft_info[3],
-                           aircraft_info[4]);
+                           aircraft_info[21],
+                           aircraft_info[4],
+                           aircraft_info[6]);
     sqlite_code = sqlite3_exec(db, sql, 0, 0, 0);
     sqlite3_free(sql);
     sqlite3_close(db);

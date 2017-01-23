@@ -17,56 +17,41 @@
  * along with sbsdump.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <curl/curl.h>
-#include <stdlib.h>
+#include <sqlite3.h>
 #include <string.h>
 
-#include "lookup.h"
 #include "macros.h"
 
-static size_t write_response(void *data, size_t size, size_t elements, void *user_data)
+static int write_result(void *result_pointer, int number_columns, char **fields, char **column_names)
 {
-    HTTP_RESPONSE *http_response = (HTTP_RESPONSE *)user_data;
+    int i;
+    char (*result)[256] = (char (*)[256])result_pointer;
 
-    http_response->data = realloc(http_response->data, http_response->size + (size * elements) + 1);
-    if(http_response->data == NULL) {
-        printf("Not enough memory\n");
-        return 0;
+    for(i = 0; i != number_columns; i++) {
+        if (fields[i] != NULL) {
+            strcpy(result[i], fields[i]);
+        }
     }
-    memcpy(&(http_response->data[http_response->size]), data, size * elements);
-    http_response->size += (size * elements);
-    http_response->data[http_response->size] = 0;
-    return (size * elements);
+    return 0;
 }
 
-char *lookup_aircraft(const char *info, const char *hex_id)
+bool lookup_aircraft(const char *hex_id, char result[][256])
 {
-    CURLcode curl_code;
-    CURL *curl_handle;
-    HTTP_RESPONSE http_response; 
-    http_response.data = malloc(1);
-    http_response.size = 0;
-    static char result[512] = "";
-    char url[512] = "https://ae.roplan.es/api/hex-";
+    sqlite3 *db;
+    char *sql;
+    int sqlite_code;
 
-    strncat(url, info, 256);
-    strncat(url, ".php?hex=", 10);
-    strncat(url, hex_id, 32);
-    curl_global_init(CURL_GLOBAL_ALL);
-    curl_handle = curl_easy_init();
-    curl_easy_setopt(curl_handle, CURLOPT_URL, url);
-    curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_response);
-    curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&http_response);
-    curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
-    curl_code = curl_easy_perform(curl_handle);
-    if(curl_code != CURLE_OK) {
-        fprintf(stderr, "curl_easy_perform() failed: %s\n",
-        curl_easy_strerror(curl_code));
+    sqlite_code = sqlite3_open(LOOKUP_DB, &db);
+    if (sqlite_code) {
+        sqlite3_close(db);
+        return false;
     }
-    else {
-        strcpy(result, http_response.data);
+    sql = sqlite3_mprintf("SELECT * from Aircraft where ModeS = '%q' COLLATE NOCASE", hex_id);
+    sqlite_code = sqlite3_exec(db, sql, write_result, (void *)result, 0);
+    sqlite3_free(sql);
+    sqlite3_close(db);
+    if (sqlite_code) {
+        return false;
     }
-    curl_easy_cleanup(curl_handle);
-    free(http_response.data);
-    return result;
+    return true;
 }

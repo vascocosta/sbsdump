@@ -107,7 +107,7 @@ bool new_aircraft(MESSAGE *message, bool callsign, unsigned long int *hex_ids)
 
 int main(int argc, char *argv[])
 {
-    char aircraft_info[5][256];
+    char aircraft_info[50][256];
     char buffer[256];
     unsigned long int hex_ids[MAX_HEX_IDS] = {0};
     char *hostname = NULL;
@@ -170,12 +170,7 @@ int main(int argc, char *argv[])
             parse_message(message, buffer);
             if (option_s) {
                 if (new_aircraft(message, option_c, hex_ids)) {
-                    strcpy(aircraft_info[0], lookup_aircraft("reg", message->hex_id));
-                    strcpy(aircraft_info[1], lookup_aircraft("type", message->hex_id));
-                    strcpy(aircraft_info[2], lookup_aircraft("airline", message->hex_id));
-                    strcpy(aircraft_info[3], lookup_aircraft("image", message->hex_id));
-                    strcpy(aircraft_info[4], "https://www.flightradar24.com/data/aircraft/");
-                    strcat(aircraft_info[4], aircraft_info[0]);
+                    lookup_aircraft(message->hex_id, aircraft_info);
                     printf("Date:\t\t%s\n"
                             "Time:\t\t%s\n"
                             "Hex:\t\t%s\n"
@@ -183,17 +178,17 @@ int main(int argc, char *argv[])
                             "Model:\t\t%s\n"
                             "Callsign:\t%s\n"
                             "Airline:\t%s\n"
-                            "Image:\t\t%s\n"
-                            "FR24:\t\t%s\n\n",
+                            "Country:\t%s\n"
+                            "FR24:\t\thttps://www.flightradar24.com/data/aircraft/%s\n\n",
                             message->date,
                             message->time,
                             message->hex_id,
-                            aircraft_info[0],
-                            aircraft_info[1],
+                            aircraft_info[6],
+                            aircraft_info[14],
                             message->callsign,
-                            aircraft_info[2],
-                            aircraft_info[3],
-                            aircraft_info[4]);
+                            aircraft_info[21],
+                            aircraft_info[4],
+                            aircraft_info[6]);
                     if (option_l) {
                         if (!log_aircraft(message, aircraft_info)) {
                             perror("Problem logging aircraft");

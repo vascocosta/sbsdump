@@ -20,11 +20,8 @@
 #ifndef LOOKUP_H
 #define LOOKUP_H
 
-typedef struct {
-    char *data;
-    size_t size;
-} HTTP_RESPONSE;
+#include "macros.h"
 
-char *lookup_aircraft(const char *info, const char *hex_id);
+bool lookup_aircraft(const char *hex_id, char result[][256]);
 
 #endif
