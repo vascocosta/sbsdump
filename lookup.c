@@ -22,7 +22,10 @@
 
 #include "macros.h"
 
-static int write_result(void *result_pointer, int number_columns, char **fields, char **column_names)
+static int write_result(void *result_pointer,
+                        int number_columns,
+                        char **fields,
+                        char **column_names)
 {
     int i;
     char (*result)[256] = (char (*)[256])result_pointer;
@@ -46,7 +49,10 @@ bool lookup_aircraft(const char *hex_id, char result[][256])
         sqlite3_close(db);
         return false;
     }
-    sql = sqlite3_mprintf("SELECT * from Aircraft where ModeS = '%q' COLLATE NOCASE", hex_id);
+    sql = sqlite3_mprintf("SELECT * from Aircraft"
+                          "where ModeS = '%q'"
+                          "COLLATE NOCASE",
+                          hex_id);
     sqlite_code = sqlite3_exec(db, sql, write_result, (void *)result, 0);
     sqlite3_free(sql);
     sqlite3_close(db);
