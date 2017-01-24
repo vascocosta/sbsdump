@@ -32,8 +32,6 @@
 #include "macros.h"
 #include "message.h"
 
-#define MAX_HEX_IDS 1000
-
 #define USAGE                                                       \
     "Usage: sbsdump [OPTION]... hostname\n"                         \
     "Dump data in SBS format from a socket."                        \
