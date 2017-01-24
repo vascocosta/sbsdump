@@ -172,23 +172,23 @@ int main(int argc, char *argv[])
                 if (new_aircraft(message, option_c, hex_ids)) {
                     lookup_aircraft(message->hex_id, aircraft_info);
                     printf("Date:\t\t%s\n"
-                            "Time:\t\t%s\n"
-                            "Hex:\t\t%s\n"
-                            "Registration:\t%s\n"
-                            "Model:\t\t%s\n"
-                            "Callsign:\t%s\n"
-                            "Airline:\t%s\n"
-                            "Country:\t%s\n"
-                            "FR24:\t\thttps://www.flightradar24.com/data/aircraft/%s\n\n",
-                            message->date,
-                            message->time,
-                            message->hex_id,
-                            aircraft_info[6],
-                            aircraft_info[14],
-                            message->callsign,
-                            aircraft_info[21],
-                            aircraft_info[4],
-                            aircraft_info[6]);
+                           "Time:\t\t%s\n"
+                           "Hex:\t\t%s\n"
+                           "Registration:\t%s\n"
+                           "Model:\t\t%s\n"
+                           "Callsign:\t%s\n"
+                           "Airline:\t%s\n"
+                           "Country:\t%s\n"
+                           "FR24:\t\thttps://www.flightradar24.com/data/aircraft/%s\n\n",
+                           message->date,
+                           message->time,
+                           message->hex_id,
+                           aircraft_info[6],
+                           aircraft_info[14],
+                           message->callsign,
+                           aircraft_info[21],
+                           aircraft_info[4],
+                           aircraft_info[6]);
                     if (option_l) {
                         if (!log_aircraft(message, aircraft_info)) {
                             perror("Problem logging aircraft");
@@ -197,21 +197,21 @@ int main(int argc, char *argv[])
                 }
             } else {
                 printf("Callsign: %s\n"
-                        "Altitude: %d "
-                        "Ground speed: %d "
-                        "Vertical rate: %d\n"
-                        "Track: %d "
-                        "Lat: %f "
-                        "Lon: %f\n"
-                        "Squawk: %d\n\n",
-                        message->callsign,
-                        message->altitude,
-                        message->ground_speed,
-                        message->vertical_rate,
-                        message->track,
-                        message->latitude,
-                        message->longitude,
-                        message->squawk);
+                       "Altitude: %d "
+                       "Ground speed: %d "
+                       "Vertical rate: %d\n"
+                       "Track: %d "
+                       "Lat: %f "
+                       "Lon: %f\n"
+                       "Squawk: %d\n\n",
+                       message->callsign,
+                       message->altitude,
+                       message->ground_speed,
+                       message->vertical_rate,
+                       message->track,
+                       message->latitude,
+                       message->longitude,
+                       message->squawk);
             }
         }
         fflush(stdout);
