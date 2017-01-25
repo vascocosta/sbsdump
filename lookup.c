@@ -49,9 +49,9 @@ bool lookup_aircraft(const char *hex_id, char result[][256])
         sqlite3_close(db);
         return false;
     }
-    sql = sqlite3_mprintf("SELECT * from Aircraft"
-                          "where ModeS = '%q'"
-                          "COLLATE NOCASE",
+    sql = sqlite3_mprintf("SELECT * from Aircraft \
+                           where ModeS = '%q' \
+                           COLLATE NOCASE",
                           hex_id);
     sqlite_code = sqlite3_exec(db, sql, write_result, (void *)result, 0);
     sqlite3_free(sql);
