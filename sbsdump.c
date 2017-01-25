@@ -32,20 +32,16 @@
 #include "macros.h"
 #include "message.h"
 
-#define USAGE                                                       \
-    "Usage: sbsdump [OPTION]... hostname\n"                         \
-    "Dump data in SBS format from a socket."                        \
-    "\n"                                                            \
-    "  -c show only aircrafts with a callsign in spotting mode\n"   \
-    "  -h display this help and exit\n"                             \
-    "  -l log aircrafts into a data base when in spotting mode\n"   \
-    "  -p set port (default 30003)\n"                               \
-    "  -r show messages in raw format\n"                            \
-    "  -s show only new aircrafts excluding dups (spotting mode)\n"
-
 void show_usage()
 {
-    printf(USAGE);
+    printf("Usage: sbsdump [OPTION]... hostname\n"
+           "Dump data in SBS format from a socket.\n"
+           "  -c show only aircrafts with a callsign in spotting mode\n"
+           "  -h display this help and exit\n"
+           "  -l log aircrafts into a data base when in spotting mode\n"
+           "  -p set port (default 30003)\n"
+           "  -r show messages in raw format\n"
+           "  -s show only new aircrafts excluding dups (spotting mode)\n");
 }
 
 int compare_hex_id(const void *a, const void *b)
