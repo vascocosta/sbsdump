@@ -27,8 +27,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "log.h"
-#include "lookup.h"
+#include "database.h"
 #include "macros.h"
 #include "message.h"
 

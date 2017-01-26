@@ -17,12 +17,13 @@
  * along with sbsdump.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOG_H
-#define LOG_H
+#ifndef DATABASE_H
+#define DATABASE_H
 
 #include "macros.h"
 #include "message.h"
 
 bool log_aircraft(MESSAGE *message, char aircraft_info[][256]);
+bool lookup_aircraft(const char *hex_id, char result[][256]);
 
 #endif
