@@ -23,7 +23,7 @@
 #include "macros.h"
 #include "message.h"
 
-bool log_aircraft(MESSAGE *message, char aircraft_info[][256]);
+bool log_aircraft(MESSAGE *message, char aircraft_info[][256], bool daily);
 bool lookup_aircraft(const char *hex_id, char result[][256]);
 
 #endif

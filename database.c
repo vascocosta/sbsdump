@@ -39,12 +39,33 @@ static int write_result(void *result_pointer,
     return 0;
 }
 
-bool log_aircraft(MESSAGE *message, char aircraft_info[][256])
+bool log_aircraft(MESSAGE *message, char aircraft_info[][256], bool daily)
 {
     sqlite3 *db;
+    char result[50][256];
     char *sql;
     int sqlite_code;
 
+    if (daily) {
+        sqlite_code = sqlite3_open(LOG_DB, &db);
+        if (sqlite_code) {
+            sqlite3_close(db);
+            return false;
+        }
+        sql = sqlite3_mprintf("SELECT * from aircrafts \
+                               where hex_id = '%q' \
+                               and date = '%q' \
+                               COLLATE NOCASE",
+                              message->hex_id,
+                              message->date);
+        sqlite_code = sqlite3_exec(db, sql, write_result, (void *)result, 0);
+        sqlite3_free(sql);
+        sqlite3_close(db);
+        if (sqlite_code ||
+           (result[3] != NULL && (strcmp(result[3], message->hex_id) == 0))) {
+            return true;
+        }
+    }
     sqlite_code = sqlite3_open(LOG_DB, &db);
     if (sqlite_code) {
         sqlite3_close(db);

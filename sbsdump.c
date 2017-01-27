@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
                            aircraft_info[4],
                            aircraft_info[6]);
                     if (option_l) {
-                        if (!log_aircraft(message, aircraft_info)) {
+                        if (!log_aircraft(message, aircraft_info, true)) {
                             perror("Problem logging aircraft");
                         }
                     }
