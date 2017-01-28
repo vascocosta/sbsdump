@@ -18,6 +18,7 @@
  */
 
 #include <sqlite3.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "macros.h"
@@ -100,12 +101,16 @@ bool log_aircraft(MESSAGE *message, char aircraft_info[][256], bool daily)
     return true;
 }
 
-bool lookup_aircraft(const char *hex_id, char result[][256])
+bool lookup_aircraft(const char *hex_id, char result[][256], size_t n)
 {
     sqlite3 *db;
+    int i;
     char *sql;
     int sqlite_code;
 
+    for (i = 0; i != n; i++) {
+        strcpy(result[i], "N/A");
+    }
     sqlite_code = sqlite3_open(LOOKUP_DB, &db);
     if (sqlite_code) {
         sqlite3_close(db);

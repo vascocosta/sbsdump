@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
             parse_message(message, buffer);
             if (option_s) {
                 if (new_aircraft(message, option_c, hex_ids)) {
-                    lookup_aircraft(message->hex_id, aircraft_info);
+                    lookup_aircraft(message->hex_id, aircraft_info, 50);
                     printf("Date:\t\t%s\n"
                            "Time:\t\t%s\n"
                            "Hex:\t\t%s\n"
