@@ -54,7 +54,7 @@ void parse_message(MESSAGE *message, char *buffer)
                 start = pch + 1;
             }
         } else {
-            fields[i] = "n/a";
+            fields[i] = "N/A";
             start += 1;
         }
     }
