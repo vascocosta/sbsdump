@@ -2,6 +2,11 @@
 
 The sbsdump tool connects to ADS-B devices on TCP port 30003 by default and dumps data in SBS format.
 
+## Dependencies
+
+ - libc
+ - libsqlite3
+
 ## Installation
 
 `make`
