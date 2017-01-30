@@ -4,6 +4,7 @@ The sbsdump tool connects to ADS-B devices on TCP port 30003 by default and dump
 
 ## Dependencies
 
+ - C compiler
  - libc
  - libsqlite3
 
