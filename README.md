@@ -9,11 +9,12 @@ The sbsdump tool connects to ADS-B devices on TCP port 30003 by default and dump
 ## Usage
 
 ```
-pi@neptunium:~/src/github.com/vascocosta/sbsdump $ ./sbsdump
+gluon@neptunium:~/src/github.com/vascocosta/sbsdump $ ./sbsdump
 Usage: sbsdump [OPTION]... hostname
 Dump data in SBS format from a socket.
   -c show only aircrafts with a callsign in spotting mode
   -h display this help and exit
+  -l log aircrafts into a data base when in spotting mode
   -p set port (default 30003)
   -r show messages in raw format
   -s show only new aircrafts excluding dups (spotting mode)
@@ -22,7 +23,7 @@ Dump data in SBS format from a socket.
 ## Examples
 
 ```
-pi@neptunium:~/src/github.com/vascocosta/sbsdump $ ./sbsdump localhost
+gluon@neptunium:~/src/github.com/vascocosta/sbsdump $ ./sbsdump localhost
 Callsign: VKG605
 Altitude: 0 Ground speed: 0 Vertical rate: 0
 Track: 0 Lat: 0.000000 Lon: 0.000000
@@ -40,7 +41,7 @@ Squawk: 0
 ```
 
 ```
-pi@neptunium:~/src/github.com/vascocosta/sbsdump $ ./sbsdump -r localhost
+gluon@neptunium:~/src/github.com/vascocosta/sbsdump $ ./sbsdump -r localhost
 MSG,3,111,11111,4951CD,111111,2017/01/09,20:57:04.943,2017/01/09,20:57:04.943,,6050,,,38.80811,-9.23425,,,,,,0
 MSG,4,111,11111,4951CD,111111,2017/01/09,20:57:05.113,2017/01/09,20:57:05.078,,,272,207,,,-704,,,,,0
 MSG,3,111,11111,4951CD,111111,2017/01/09,20:57:05.442,2017/01/09,20:57:05.406,,6050,,,38.80753,-9.23456,,,,,,0
@@ -49,7 +50,7 @@ MSG,3,111,11111,4951CD,111111,2017/01/09,20:57:06.002,2017/01/09,20:57:05.993,,6
 ```
 
 ```
-pi@neptunium:~/src/github.com/vascocosta/sbsdump $ ./sbsdump -s localhost
+gluon@neptunium:~/src/github.com/vascocosta/sbsdump $ ./sbsdump -s localhost
 Date:           2017/01/20
 Time:           16:34:50.164
 Hex:            020066
